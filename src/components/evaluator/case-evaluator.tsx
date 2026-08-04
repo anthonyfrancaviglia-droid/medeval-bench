@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useState, type FormEvent, type ReactNode } from "react";
 import {
   dimensionDetails,
@@ -15,6 +16,7 @@ import {
 } from "@/lib/evaluation-storage";
 import type {
   BenchmarkSubjectArea,
+  BenchmarkCase,
   ErrorTaxonomy,
   EvaluationDimension,
   EvaluationDimensionScores,
@@ -49,13 +51,13 @@ interface EvaluatorFormState {
 
 const inputClassName = "mt-2 w-full rounded-xl border border-slate-300 bg-white px-3.5 py-3 text-sm text-slate-900 shadow-sm outline-none transition placeholder:text-slate-400 hover:border-slate-400 focus:border-teal-600 focus:ring-4 focus:ring-teal-600/10 disabled:cursor-not-allowed disabled:bg-slate-100 disabled:text-slate-500 aria-[invalid=true]:border-red-400 aria-[invalid=true]:focus:border-red-500 aria-[invalid=true]:focus:ring-red-500/10";
 
-function createEmptyForm(): EvaluatorFormState {
+function createEmptyForm(benchmarkCase?: BenchmarkCase): EvaluatorFormState {
   return {
-    caseId: "",
-    caseTitle: "",
-    subjectArea: "",
-    prompt: "",
-    referenceNotes: "",
+    caseId: benchmarkCase?.id ?? "",
+    caseTitle: benchmarkCase?.title ?? "",
+    subjectArea: benchmarkCase?.subjectArea ?? "",
+    prompt: benchmarkCase?.prompt ?? "",
+    referenceNotes: benchmarkCase?.referenceNotes ?? "",
     response: "",
     scores: {},
     errors: [],
@@ -129,14 +131,21 @@ function ScoreControl({
   );
 }
 
-export function CaseEvaluator() {
-  const [form, setForm] = useState<EvaluatorFormState>(createEmptyForm);
+export function CaseEvaluator({
+  benchmarkCase,
+  requestedCaseId,
+}: {
+  benchmarkCase?: BenchmarkCase;
+  requestedCaseId?: string;
+}) {
+  const [form, setForm] = useState<EvaluatorFormState>(() => createEmptyForm(benchmarkCase));
   const [errors, setErrors] = useState<FormErrors>({});
   const [savedEvaluation, setSavedEvaluation] = useState<SavedEvaluation | null>(null);
   const [storageError, setStorageError] = useState("");
   const [confirmClear, setConfirmClear] = useState(false);
 
   const locked = savedEvaluation !== null;
+  const caseFieldsLocked = locked || Boolean(benchmarkCase);
   const noMajorErrorSelected = form.errors.includes("NO_MAJOR_ERROR");
 
   function clearValidationError(key: ValidationKey) {
@@ -242,7 +251,7 @@ export function CaseEvaluator() {
   }
 
   function resetForm() {
-    setForm(createEmptyForm());
+    setForm(createEmptyForm(benchmarkCase));
     setErrors({});
     setSavedEvaluation(null);
     setStorageError("");
@@ -251,10 +260,16 @@ export function CaseEvaluator() {
   }
 
   function hasEnteredData(): boolean {
+    const assessmentDataEntered = Boolean(
+      form.response || Object.keys(form.scores).length || form.errors.length ||
+      form.verdict || form.reviewerNotes
+    );
+
+    if (benchmarkCase) return assessmentDataEntered;
+
     return Boolean(
       form.caseId || form.caseTitle || form.subjectArea || form.prompt ||
-      form.referenceNotes || form.response || Object.keys(form.scores).length ||
-      form.errors.length || form.verdict || form.reviewerNotes
+      form.referenceNotes || assessmentDataEntered
     );
   }
 
@@ -273,7 +288,7 @@ export function CaseEvaluator() {
           <div className="min-w-0">
             <p className="section-label">Evaluation workspace</p>
             <h1 className="mt-4 break-words text-4xl font-semibold tracking-[-0.045em] text-slate-950 sm:text-5xl">Case Evaluator</h1>
-            <p className="mt-4 max-w-3xl text-lg leading-8 text-slate-600">Enter a personally verified case, score a model response, and save a structured evaluation to this browser.</p>
+            <p className="mt-4 max-w-3xl text-lg leading-8 text-slate-600">{benchmarkCase ? "Review a model response against this verified library case and save a structured evaluation to this browser." : "Enter a personally verified case, score a model response, and save a structured evaluation to this browser."}</p>
           </div>
           <div className="rounded-xl border border-teal-200 bg-white/80 px-4 py-3 text-sm text-slate-600 shadow-sm backdrop-blur">
             <div className="flex items-center gap-2 font-semibold text-teal-800"><span className="status-dot" /> Local-only workspace</div>
@@ -284,6 +299,22 @@ export function CaseEvaluator() {
         <div className="mt-7 rounded-xl border border-amber-200 bg-amber-50/80 px-4 py-3 text-sm leading-6 text-amber-950">
           <strong>Educational use only.</strong> This evaluator is not a medical device and does not provide clinical decision support or medical advice.
         </div>
+
+        {benchmarkCase && (
+          <div className="mt-5 flex flex-col gap-3 rounded-xl border border-emerald-200 bg-emerald-50/80 px-4 py-3 sm:flex-row sm:items-center sm:justify-between">
+            <div>
+              <p className="text-sm font-semibold text-emerald-950">Verified benchmark case loaded</p>
+              <p className="mt-1 text-xs leading-5 text-emerald-800">Case information is locked to preserve the personally verified library record. Evaluation fields remain editable.</p>
+            </div>
+            <Link href={`/cases/${encodeURIComponent(benchmarkCase.id)}`} className="shrink-0 rounded-lg text-sm font-semibold text-emerald-800 underline decoration-emerald-300 underline-offset-4 hover:text-emerald-950 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emerald-700">Inspect source case</Link>
+          </div>
+        )}
+
+        {!benchmarkCase && requestedCaseId && (
+          <div role="status" className="mt-5 rounded-xl border border-slate-300 bg-white/80 px-4 py-3 text-sm leading-6 text-slate-700">
+            No verified library case matched <code className="break-all font-mono text-xs text-slate-900">{requestedCaseId}</code>. Manual entry mode remains available below.
+          </div>
+        )}
 
         {savedEvaluation && (
           <div id="save-success" tabIndex={-1} role="status" className="mt-7 rounded-2xl border border-emerald-300 bg-emerald-50 p-5 outline-none focus:ring-2 focus:ring-emerald-600 sm:flex sm:items-center sm:justify-between sm:gap-6">
@@ -307,21 +338,21 @@ export function CaseEvaluator() {
         )}
 
         <form noValidate onSubmit={handleSubmit} className="mt-7 space-y-6">
-          <FormSection number="01" title="Case information" description="Enter only benchmark material that you have personally verified.">
+          <FormSection number="01" title="Case information" description={benchmarkCase ? "Loaded from the personally verified benchmark library; these fields are read-only." : "Enter only benchmark material that you have personally verified."}>
             <div className="grid min-w-0 gap-5 sm:grid-cols-2">
               <label className="min-w-0 text-sm font-semibold text-slate-700" htmlFor="field-caseId">
                 Case ID <span className="text-red-600" aria-hidden="true">*</span>
-                <input id="field-caseId" name="caseId" type="text" value={form.caseId} disabled={locked} required aria-invalid={Boolean(errors.caseId)} aria-describedby={errors.caseId ? "error-caseId" : undefined} onChange={(event) => updateText("caseId", event.target.value, "caseId")} placeholder="Enter a unique case ID" className={inputClassName} />
+                <input id="field-caseId" name="caseId" type="text" value={form.caseId} disabled={caseFieldsLocked} required aria-invalid={Boolean(errors.caseId)} aria-describedby={errors.caseId ? "error-caseId" : undefined} onChange={(event) => updateText("caseId", event.target.value, "caseId")} placeholder="Enter a unique case ID" className={inputClassName} />
                 <FieldError id="error-caseId" message={errors.caseId} />
               </label>
               <label className="min-w-0 text-sm font-semibold text-slate-700" htmlFor="field-caseTitle">
                 Case title <span className="text-red-600" aria-hidden="true">*</span>
-                <input id="field-caseTitle" name="caseTitle" type="text" value={form.caseTitle} disabled={locked} required aria-invalid={Boolean(errors.caseTitle)} aria-describedby={errors.caseTitle ? "error-caseTitle" : undefined} onChange={(event) => updateText("caseTitle", event.target.value, "caseTitle")} placeholder="Enter a verified case title" className={inputClassName} />
+                <input id="field-caseTitle" name="caseTitle" type="text" value={form.caseTitle} disabled={caseFieldsLocked} required aria-invalid={Boolean(errors.caseTitle)} aria-describedby={errors.caseTitle ? "error-caseTitle" : undefined} onChange={(event) => updateText("caseTitle", event.target.value, "caseTitle")} placeholder="Enter a verified case title" className={inputClassName} />
                 <FieldError id="error-caseTitle" message={errors.caseTitle} />
               </label>
               <label className="min-w-0 text-sm font-semibold text-slate-700 sm:col-span-2" htmlFor="field-subjectArea">
                 Subject area <span className="text-red-600" aria-hidden="true">*</span>
-                <select id="field-subjectArea" name="subjectArea" value={form.subjectArea} disabled={locked} required aria-invalid={Boolean(errors.subjectArea)} aria-describedby={errors.subjectArea ? "error-subjectArea" : undefined} onChange={(event) => { setForm((current) => ({ ...current, subjectArea: event.target.value as BenchmarkSubjectArea | "" })); clearValidationError("subjectArea"); setConfirmClear(false); }} className={inputClassName}>
+                <select id="field-subjectArea" name="subjectArea" value={form.subjectArea} disabled={caseFieldsLocked} required aria-invalid={Boolean(errors.subjectArea)} aria-describedby={errors.subjectArea ? "error-subjectArea" : undefined} onChange={(event) => { setForm((current) => ({ ...current, subjectArea: event.target.value as BenchmarkSubjectArea | "" })); clearValidationError("subjectArea"); setConfirmClear(false); }} className={inputClassName}>
                   <option value="">Select a subject area</option>
                   {subjectAreas.map((subject) => <option key={subject} value={subject}>{subject}</option>)}
                 </select>
@@ -329,12 +360,12 @@ export function CaseEvaluator() {
               </label>
               <label className="min-w-0 text-sm font-semibold text-slate-700 sm:col-span-2" htmlFor="field-prompt">
                 Benchmark prompt / case text <span className="text-red-600" aria-hidden="true">*</span>
-                <textarea id="field-prompt" name="prompt" rows={8} value={form.prompt} disabled={locked} required aria-invalid={Boolean(errors.prompt)} aria-describedby={errors.prompt ? "error-prompt" : undefined} onChange={(event) => updateText("prompt", event.target.value, "prompt")} placeholder="Enter personally verified benchmark prompt or case text" className={`${inputClassName} resize-y leading-6`} />
+                <textarea id="field-prompt" name="prompt" rows={8} value={form.prompt} disabled={caseFieldsLocked} required aria-invalid={Boolean(errors.prompt)} aria-describedby={errors.prompt ? "error-prompt" : undefined} onChange={(event) => updateText("prompt", event.target.value, "prompt")} placeholder="Enter personally verified benchmark prompt or case text" className={`${inputClassName} resize-y leading-6`} />
                 <FieldError id="error-prompt" message={errors.prompt} />
               </label>
               <label className="min-w-0 text-sm font-semibold text-slate-700 sm:col-span-2" htmlFor="field-referenceNotes">
                 Reference judgment or evaluation guidance <span className="font-normal text-slate-400">(optional)</span>
-                <textarea id="field-referenceNotes" name="referenceNotes" rows={5} value={form.referenceNotes} disabled={locked} onChange={(event) => updateText("referenceNotes", event.target.value)} placeholder="Enter your verified reference judgment or evaluation guidance" className={`${inputClassName} resize-y leading-6`} />
+                <textarea id="field-referenceNotes" name="referenceNotes" rows={5} value={form.referenceNotes} disabled={caseFieldsLocked} onChange={(event) => updateText("referenceNotes", event.target.value)} placeholder="Enter your verified reference judgment or evaluation guidance" className={`${inputClassName} resize-y leading-6`} />
               </label>
             </div>
           </FormSection>
@@ -409,7 +440,7 @@ export function CaseEvaluator() {
               <p className="mt-1 max-w-2xl text-sm leading-6 text-slate-300">Saving appends this evaluation to <code className="break-all font-mono text-xs text-teal-300">{EVALUATIONS_STORAGE_KEY}</code>. Nothing is uploaded.</p>
             </div>
             <div className="mt-5 flex shrink-0 flex-wrap gap-3 sm:mt-0 sm:justify-end">
-              {!locked && <button type="button" onClick={requestClear} className="button-secondary">Clear form</button>}
+              {!locked && <button type="button" onClick={requestClear} className="button-secondary">{benchmarkCase ? "Clear assessment" : "Clear form"}</button>}
               {!locked && <button type="submit" className="button-primary">Save evaluation</button>}
               {locked && <button type="button" onClick={resetForm} className="button-primary">Start new evaluation</button>}
             </div>
@@ -419,7 +450,7 @@ export function CaseEvaluator() {
             <div role="alert" aria-labelledby="clear-confirmation-title" aria-describedby="clear-confirmation-description" className="rounded-xl border border-amber-300 bg-amber-50 p-4 sm:flex sm:items-center sm:justify-between sm:gap-6">
               <div>
                 <p id="clear-confirmation-title" className="font-semibold text-amber-950">Clear this evaluation?</p>
-                <p id="clear-confirmation-description" className="mt-1 text-sm leading-6 text-amber-800">All entered, unsaved information will be removed.</p>
+                <p id="clear-confirmation-description" className="mt-1 text-sm leading-6 text-amber-800">{benchmarkCase ? "All unsaved response and assessment information will be removed. The verified case will remain loaded." : "All entered, unsaved information will be removed."}</p>
               </div>
               <div className="mt-4 flex gap-3 sm:mt-0">
                 <button type="button" onClick={() => setConfirmClear(false)} className="button-secondary">Keep editing</button>

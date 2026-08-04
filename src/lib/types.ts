@@ -42,7 +42,9 @@ export interface BenchmarkCase {
   prompt: string;
   evaluationCriteria: string[];
   referenceNotes: string;
+  tags?: string[];
   version: number;
+  verificationStatus: "VERIFIED";
 }
 
 /** The verified case fields captured with a manual evaluation. */
