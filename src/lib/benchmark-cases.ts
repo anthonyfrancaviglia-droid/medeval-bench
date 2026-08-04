@@ -1,11 +1,18 @@
 import { benchmarkCases } from "@/data/benchmark-cases";
+import { assertValidBenchmarkCases } from "./benchmark-case-validation";
 import type { BenchmarkCase, BenchmarkSubjectArea } from "./types";
+
+assertValidBenchmarkCases(benchmarkCases);
 
 export type SubjectFilter = BenchmarkSubjectArea | "ALL";
 
 export interface BenchmarkCaseFilters {
   query: string;
   subject: SubjectFilter;
+}
+
+export function getBenchmarkCases(): readonly BenchmarkCase[] {
+  return benchmarkCases;
 }
 
 export function getBenchmarkCaseById(id: string): BenchmarkCase | undefined {

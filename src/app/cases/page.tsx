@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { CaseBrowser } from "@/components/cases/case-browser";
-import { benchmarkCases } from "@/data/benchmark-cases";
+import { getBenchmarkCases } from "@/lib/benchmark-cases";
 
 export const metadata: Metadata = {
   title: "Benchmark Cases",
@@ -8,5 +8,5 @@ export const metadata: Metadata = {
 };
 
 export default function CasesPage() {
-  return <CaseBrowser cases={benchmarkCases} />;
+  return <CaseBrowser cases={getBenchmarkCases()} />;
 }

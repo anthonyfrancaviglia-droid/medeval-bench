@@ -1,11 +1,11 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { benchmarkCases } from "@/data/benchmark-cases";
 import {
   errorTaxonomy,
   overallVerdicts,
   subjectAreas,
 } from "@/lib/benchmark";
+import { getBenchmarkCases } from "@/lib/benchmark-cases";
 import {
   dimensionRubrics,
   globalScoreAnchors,
@@ -635,7 +635,7 @@ export default function MethodologyPage() {
             <div className="mt-auto pt-6">
               <div className="flex items-center justify-between gap-4 rounded-xl bg-slate-50 px-4 py-3">
                 <span className="text-sm font-medium text-slate-600">Current verified collection</span>
-                <span className="font-mono text-lg font-semibold text-slate-950">{benchmarkCases.length}</span>
+                <span className="font-mono text-lg font-semibold text-slate-950">{getBenchmarkCases().length}</span>
               </div>
             </div>
           </article>

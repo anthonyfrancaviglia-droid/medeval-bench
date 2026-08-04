@@ -61,6 +61,26 @@ Only content personally verified by the project owner belongs in the static veri
 
 No scientific benchmark case content is generated automatically into the verified library.
 
+### Adding a personally verified case
+
+The project owner supplies and verifies every case before it is inserted into `src/data/benchmark-cases.ts`. Keep the collection in that single file while it remains small, and use this placeholder-only authoring checklist:
+
+```text
+Case ID: <unique owner-supplied case ID>
+Title: <owner-supplied title>
+Subject: <one approved subject area>
+Version: <positive integer>
+Verification status: VERIFIED
+Evaluation criteria: <owner-supplied string list, or an empty list when unused>
+Benchmark prompt: <owner-supplied verified prompt>
+Verified reference notes / evaluation guidance: <owner-supplied verified guidance>
+Optional tags: <owner-supplied string list, or omit>
+```
+
+Benchmark scientific/domain content must be supplied and personally verified by the project owner. Coding assistance must not generate or substantively rewrite verified benchmark content.
+
+Each case ID must be unique. The subject must be one of Pharmacology, Medication Safety, Biology, Chemistry, Epidemiology, or Statistics; the verification status must be `VERIFIED`; and the version must be a positive integer. Static case data must not contain a model response, dimension scores, error labels, a verdict, reviewer notes, evaluation timestamps, analytics, or saved evaluation IDs. After inserting an owner-supplied case, run `npm run lint` and `npm run build`; the benchmark integrity assertion will fail clearly for malformed records or duplicate IDs.
+
 ## Tech Stack
 
 - [Next.js](https://nextjs.org/) App Router

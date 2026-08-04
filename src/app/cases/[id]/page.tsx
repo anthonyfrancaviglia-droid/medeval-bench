@@ -1,11 +1,13 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { benchmarkCases } from "@/data/benchmark-cases";
-import { getBenchmarkCaseById } from "@/lib/benchmark-cases";
+import {
+  getBenchmarkCaseById,
+  getBenchmarkCases,
+} from "@/lib/benchmark-cases";
 
 export function generateStaticParams() {
-  return benchmarkCases.map(({ id }) => ({ id }));
+  return getBenchmarkCases().map(({ id }) => ({ id }));
 }
 
 export async function generateMetadata({ params }: PageProps<"/cases/[id]">): Promise<Metadata> {
