@@ -86,4 +86,141 @@ New York:
 - New York Public Health Law § 3333
 - 10 NYCRR Part 80, including § 80.73 where applicable`,
   },
+  {
+    id: "MEDSAFE-002",
+    title: "Metformin management before intravenous iodinated contrast in stable CKD",
+    subjectArea: "Medication Safety",
+    verificationStatus: "VERIFIED",
+    version: 1,
+    evaluationCriteria: [],
+    prompt: `Assume today is August 4, 2026. A 62-year-old outpatient with type 2 diabetes takes metformin 500 mg twice daily. The patient has stable chronic kidney disease with an eGFR of 44 mL/min/1.73 m² measured yesterday; prior eGFR values have been stable in the low-to-mid 40s. There is no evidence of acute kidney injury. The patient has no history of hepatic impairment, alcoholism, or heart failure.
+
+The patient is scheduled for a contrast-enhanced CT of the abdomen using intravenous iodinated contrast. This is not an intra-arterial study.
+
+A radiology clinician states that metformin does not need to be stopped because the patient has no AKI and the eGFR is at least 30 mL/min/1.73 m². A pharmacist responds that current U.S. metformin labeling requires metformin to be withheld because the patient's eGFR is between 30 and 60 mL/min/1.73 m².
+
+Analyze:
+
+1. Whether the radiology clinician's statement is consistent with the current American College of Radiology recommendation.
+2. Whether the pharmacist's statement is consistent with current U.S. metformin prescribing information.
+3. Whether these recommendations actually conflict, and how that disagreement should be communicated rather than presenting one recommendation as universally controlling.
+4. Whether metformin itself increases the patient's risk of contrast-associated acute kidney injury.
+5. What safety concern underlies recommendations to withhold metformin around iodinated contrast.
+6. If the institution elects to follow the current U.S. prescribing information, when metformin should be stopped, what follow-up is required, and when it may be restarted.
+
+Distinguish intravenous from intra-arterial iodinated contrast. Cite the current FDA-approved prescribing information and the current ACR Manual on Contrast Media. Do not rely only on general clinical practice or an uncited summary.`,
+    referenceNotes: `Core judgment: Both clinicians are accurately describing different authoritative recommendations. The response should not erase that disagreement.
+
+ACR recommendation
+
+Under the 2026 ACR Manual on Contrast Media, this patient falls into Category I because the patient has no evidence of acute kidney injury, has an eGFR of 44 mL/min/1.73 m², and is receiving intravenous rather than the relevant arterial-catheter iodinated contrast exposure.
+
+Under that ACR recommendation:
+
+- metformin does not need to be discontinued before the IV contrast study;
+- metformin does not need to be withheld afterward solely because of the IV contrast exposure; and
+- obligatory post-procedure renal-function reassessment is not required solely for metformin management.
+
+Therefore, the radiology clinician's statement is consistent with current ACR guidance.
+
+U.S. prescribing information
+
+Current U.S. metformin prescribing information is more restrictive.
+
+For an iodinated contrast imaging procedure, the labeling instructs metformin to be discontinued at the time of or before the procedure when the patient's eGFR is between 30 and 60 mL/min/1.73 m².
+
+Because this patient's eGFR is 44, that criterion applies.
+
+The labeling further instructs clinicians to:
+
+- re-evaluate eGFR 48 hours after the imaging procedure; and
+- restart metformin if renal function is stable.
+
+Therefore, the pharmacist's statement is also consistent with current U.S. prescribing information.
+
+The sources genuinely differ
+
+A response should not say simply that “metformin must be held” without identifying the source, nor should it say that “current guidelines say metformin can always be continued.”
+
+The accurate analysis is:
+
+- FDA-approved prescribing information: hold in this patient because eGFR is 30–60.
+- ACR 2026: continuation is acceptable for this IV study because there is no AKI and eGFR is ≥30.
+
+The ACR Manual expressly recognizes that FDA labeling is more restrictive than the ACR recommendation.
+
+This is therefore a source-dependent clinical-management disagreement, not evidence that one clinician necessarily misunderstood the underlying eGFR value.
+
+Metformin and acute kidney injury
+
+Metformin itself should not be characterized as increasing the risk of contrast-associated or contrast-induced acute kidney injury.
+
+The safety concern is downstream: if clinically important acute kidney injury occurs, impaired renal clearance can promote metformin accumulation and increase the risk of metformin-associated lactic acidosis.
+
+A strong answer should distinguish:
+
+contrast exposure → possible renal injury → impaired metformin clearance → increased lactic-acidosis risk
+
+from the incorrect claim:
+
+metformin → increased contrast nephrotoxicity
+
+The response should also distinguish contrast-associated acute kidney injury from contrast-induced acute kidney injury rather than treating association with contrast exposure as proof that contrast caused the kidney injury.
+
+If the institution follows U.S. labeling
+
+For this specific patient:
+
+1. Withhold metformin at the time of or before the iodinated contrast procedure.
+2. Re-evaluate eGFR 48 hours after the procedure.
+3. Restart metformin if renal function is stable.
+
+The prescribing information does not establish an additional numerical creatinine-change threshold for defining “stable” renal function in this instruction.
+
+A response should not invent a criterion such as a less-than-25-percent creatinine increase and present it as though it were part of the FDA-approved labeling.
+
+The response should not substitute the ACR pathway while simultaneously claiming to be following the FDA-approved label.
+
+Intravenous versus intra-arterial contrast
+
+The prompt deliberately limits the case to intravenous iodinated contrast.
+
+Current U.S. metformin prescribing information separately identifies intra-arterial iodinated contrast administration as a reason to discontinue metformin.
+
+The ACR Category II recommendation is narrower than a blanket rule applying to every intra-arterial procedure. It includes arterial catheter studies that might result in emboli to the renal arteries.
+
+A response should therefore not collapse:
+
+- ordinary intravenous iodinated contrast;
+- all intra-arterial contrast procedures; and
+- the narrower ACR arterial-catheter Category II circumstance
+
+into one rule.
+
+The route of administration should also not be used to make unsupported claims that intravenous contrast is inherently lower-osmolality or that intra-arterial administration is inherently a “high-osmolar” exposure. Route and contrast-medium osmolality are separate concepts.
+
+Controlling primary authorities
+
+The case was personally verified against:
+
+- 2026 ACR Manual on Contrast Media
+- current U.S. FDA-approved metformin prescribing information
+
+Important ACR principles to preserve:
+
+- no evidence of AKI + eGFR ≥30 mL/min/1.73 m² + ordinary IV iodinated contrast falls under the less restrictive Category I recommendation;
+- metformin does not need to be discontinued solely for that IV exposure;
+- obligatory post-procedure renal-function reassessment is not required under that ACR pathway;
+- patients taking metformin are not considered at increased risk of contrast-induced acute kidney injury solely because they take metformin;
+- ACR recognizes that current FDA labeling is more restrictive;
+- Category II includes acute kidney injury, severe chronic kidney disease with eGFR below 30 mL/min/1.73 m², and relevant arterial catheter studies that might result in emboli to the renal arteries.
+
+Important U.S. prescribing-information principles to preserve:
+
+- eGFR 30–60 mL/min/1.73 m² is a criterion for discontinuing metformin at or before iodinated contrast imaging;
+- intra-arterial iodinated contrast administration is separately included;
+- eGFR is re-evaluated 48 hours after the imaging procedure;
+- metformin may be restarted if renal function is stable;
+- the labeling does not provide a less-than-25-percent creatinine-increase restart rule.`,
+  },
 ];
