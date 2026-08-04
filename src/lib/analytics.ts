@@ -1,20 +1,30 @@
 import {
   dimensionDetails,
+  dimensionScores,
   errorTaxonomy,
   overallVerdicts,
   subjectAreas,
 } from "./benchmark";
 import type {
   BenchmarkSubjectArea,
+  DimensionScore,
   ErrorTaxonomy,
   EvaluationDimension,
+  EvaluationDimensionScores,
   OverallVerdict,
   SavedEvaluation,
 } from "./types";
 
-export interface DimensionAverage {
+export interface ScoreFrequency {
+  score: DimensionScore;
+  count: number;
+  percentage: number;
+}
+
+export interface DimensionScoreDistribution {
   dimension: EvaluationDimension;
-  average: number;
+  sampleCount: number;
+  scores: ScoreFrequency[];
 }
 
 export interface VerdictSummary {
@@ -40,13 +50,14 @@ export interface RecentEvaluation {
   subjectArea: BenchmarkSubjectArea;
   verdict: OverallVerdict;
   createdAt: string;
-  meanScore: number;
+  scores: EvaluationDimensionScores;
 }
 
 export interface EvaluationAnalytics {
   totalEvaluations: number;
-  overallMeanScore: number;
-  dimensionAverages: DimensionAverage[];
+  uniqueCaseCount: number;
+  representedSubjectCount: number;
+  dimensionDistributions: DimensionScoreDistribution[];
   verdicts: VerdictSummary[];
   errorFrequencies: ErrorFrequency[];
   subjects: SubjectSummary[];
@@ -55,24 +66,29 @@ export interface EvaluationAnalytics {
 
 const dimensionNames = dimensionDetails.map(({ name }) => name);
 
-function arithmeticMean(values: readonly number[]): number {
-  if (values.length === 0) return 0;
-  return values.reduce((sum, value) => sum + value, 0) / values.length;
-}
+export function getScoreDistribution(
+  evaluations: readonly SavedEvaluation[],
+  dimension: EvaluationDimension,
+): ScoreFrequency[] {
+  return dimensionScores.map((score) => {
+    const count = evaluations.filter(
+      (evaluation) => evaluation.scores[dimension] === score,
+    ).length;
 
-export function getEvaluationMean(evaluation: SavedEvaluation): number {
-  return arithmeticMean(dimensionNames.map((dimension) => evaluation.scores[dimension]));
+    return {
+      score,
+      count,
+      percentage: evaluations.length === 0 ? 0 : (count / evaluations.length) * 100,
+    };
+  });
 }
 
 export function calculateAnalytics(evaluations: readonly SavedEvaluation[]): EvaluationAnalytics {
   const totalEvaluations = evaluations.length;
-  const allScores = evaluations.flatMap((evaluation) =>
-    dimensionNames.map((dimension) => evaluation.scores[dimension]),
-  );
-
-  const dimensionAverages = dimensionNames.map((dimension) => ({
+  const dimensionDistributions = dimensionNames.map((dimension) => ({
     dimension,
-    average: arithmeticMean(evaluations.map((evaluation) => evaluation.scores[dimension])),
+    sampleCount: totalEvaluations,
+    scores: getScoreDistribution(evaluations, dimension),
   }));
 
   const verdicts = overallVerdicts.map((verdict) => {
@@ -95,6 +111,8 @@ export function calculateAnalytics(evaluations: readonly SavedEvaluation[]): Eva
     subject,
     count: evaluations.filter((evaluation) => evaluation.case.subjectArea === subject).length,
   }));
+  const uniqueCaseCount = new Set(evaluations.map((evaluation) => evaluation.case.id)).size;
+  const representedSubjectCount = subjects.filter(({ count }) => count > 0).length;
 
   const recentEvaluations = [...evaluations]
     .sort((left, right) => Date.parse(right.createdAt) - Date.parse(left.createdAt))
@@ -106,13 +124,14 @@ export function calculateAnalytics(evaluations: readonly SavedEvaluation[]): Eva
       subjectArea: evaluation.case.subjectArea,
       verdict: evaluation.verdict,
       createdAt: evaluation.createdAt,
-      meanScore: getEvaluationMean(evaluation),
+      scores: evaluation.scores,
     }));
 
   return {
     totalEvaluations,
-    overallMeanScore: arithmeticMean(allScores),
-    dimensionAverages,
+    uniqueCaseCount,
+    representedSubjectCount,
+    dimensionDistributions,
     verdicts,
     errorFrequencies,
     subjects,
