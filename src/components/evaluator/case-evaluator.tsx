@@ -14,6 +14,14 @@ import {
   EVALUATIONS_STORAGE_KEY,
   saveEvaluation,
 } from "@/lib/evaluation-storage";
+import {
+  dimensionRubrics,
+  globalScoreAnchors,
+  SCORING_METHODOLOGY_VERSION,
+  type DimensionRubric,
+  type RubricAnchor,
+  type RubricNote,
+} from "@/lib/scoring-methodology";
 import type {
   BenchmarkSubjectArea,
   BenchmarkCase,
@@ -102,20 +110,41 @@ function FieldError({ id, message }: { id: string; message?: string }) {
   return <p id={id} className="mt-2 text-sm font-medium text-red-700">{message}</p>;
 }
 
+function EvaluatorRubricBody({
+  content,
+}: {
+  content: Pick<RubricAnchor, "paragraphs" | "bullets" | "closing"> | RubricNote;
+}) {
+  return (
+    <div className="space-y-2 text-xs leading-5 text-slate-600">
+      {content.paragraphs?.map((paragraph) => <p key={paragraph}>{paragraph}</p>)}
+      {content.bullets && (
+        <ul className="space-y-1.5">
+          {content.bullets.map((item) => <li key={item} className="flex min-w-0 items-start gap-2"><span aria-hidden="true" className="mt-2 size-1 shrink-0 rounded-full bg-teal-600" /><span className="min-w-0 break-words">{item}</span></li>)}
+        </ul>
+      )}
+      {content.closing?.map((paragraph) => <p key={paragraph}>{paragraph}</p>)}
+    </div>
+  );
+}
+
 function ScoreControl({
-  dimension,
+  rubric,
   value,
   disabled,
   onChange,
 }: {
-  dimension: EvaluationDimension;
+  rubric: DimensionRubric;
   value?: number;
   disabled: boolean;
   onChange: (score: 1 | 2 | 3 | 4 | 5) => void;
 }) {
+  const dimension = rubric.name;
+
   return (
     <fieldset disabled={disabled} className="min-w-0 rounded-xl border border-slate-200 p-4 sm:p-5">
       <legend className="px-1 text-sm font-semibold text-slate-800">{dimension}</legend>
+      <p className="mt-1 text-xs leading-5 text-slate-500">{rubric.definition[0]}</p>
       <div className="mt-2 grid grid-cols-5 gap-2">
         {dimensionScores.map((score) => {
           const selected = value === score;
@@ -127,6 +156,37 @@ function ScoreControl({
           );
         })}
       </div>
+      <details className="group mt-4 border-t border-slate-200 pt-3">
+        <summary className="flex cursor-pointer list-none items-center justify-between gap-3 rounded-lg px-2 py-2 text-xs font-semibold text-teal-800 outline-none transition hover:bg-teal-50 focus-visible:ring-2 focus-visible:ring-teal-600 focus-visible:ring-offset-2 [&::-webkit-details-marker]:hidden">
+          <span>View {dimension} anchors</span>
+          <span aria-hidden="true" className="flex size-6 shrink-0 items-center justify-center rounded-full border border-teal-200 bg-white text-base leading-none transition-transform group-open:rotate-45">+</span>
+        </summary>
+        <div className="mt-3 space-y-3 rounded-xl bg-slate-50 p-3 sm:p-4">
+          <div className="space-y-2 text-xs leading-5 text-slate-600">
+            {rubric.definition.map((paragraph) => <p key={paragraph}>{paragraph}</p>)}
+            {rubric.definitionBullets && (
+              <ul className="space-y-1.5">
+                {rubric.definitionBullets.map((item) => <li key={item} className="flex items-start gap-2"><span aria-hidden="true" className="mt-2 size-1 shrink-0 rounded-full bg-teal-600" /><span>{item}</span></li>)}
+              </ul>
+            )}
+          </div>
+          {rubric.anchors.map((anchor) => (
+            <article key={anchor.score} className="min-w-0 rounded-lg border border-slate-200 bg-white p-3">
+              <h3 className="flex min-w-0 items-start gap-2 text-xs font-semibold leading-5 text-slate-900">
+                <span className="flex size-6 shrink-0 items-center justify-center rounded-md bg-teal-700 font-mono text-[11px] text-white">{anchor.score}</span>
+                <span className="min-w-0 break-words pt-0.5">{anchor.label}</span>
+              </h3>
+              <div className="mt-2"><EvaluatorRubricBody content={anchor} /></div>
+            </article>
+          ))}
+          {rubric.notes?.map((note, noteIndex) => (
+            <aside key={`${rubric.name}-note-${noteIndex}`} className="rounded-lg border border-teal-200 bg-teal-50/70 p-3">
+              {note.heading && <p className="mb-2 text-[10px] font-semibold uppercase tracking-[0.12em] text-teal-800">{note.heading}</p>}
+              <EvaluatorRubricBody content={note} />
+            </aside>
+          ))}
+        </div>
+      </details>
     </fieldset>
   );
 }
@@ -378,15 +438,24 @@ export function CaseEvaluator({
             </label>
           </FormSection>
 
-          <FormSection number="03" title="Dimension scoring" description="Choose exactly one score from 1 to 5 for every dimension.">
-            <div id="field-scores" tabIndex={-1} aria-invalid={Boolean(errors.scores)} aria-describedby={errors.scores ? "error-scores" : undefined} className="min-w-0 outline-none focus:ring-2 focus:ring-red-400 focus:ring-offset-4">
-              <div className="mb-5 flex flex-wrap gap-x-5 gap-y-2 rounded-lg bg-slate-50 px-4 py-3 text-xs font-medium text-slate-600">
-                <span><strong className="text-slate-900">1</strong> = poor</span>
-                <span><strong className="text-slate-900">3</strong> = mixed / adequate</span>
-                <span><strong className="text-slate-900">5</strong> = strong</span>
+          <FormSection number="03" title="Dimension scoring" description="Choose exactly one ordinal score from 1 to 5 for every dimension.">
+            <div id="field-scores" tabIndex={-1} aria-invalid={Boolean(errors.scores)} aria-describedby={errors.scores ? "scoring-guidance-summary error-scores" : "scoring-guidance-summary"} className="min-w-0 outline-none focus:ring-2 focus:ring-red-400 focus:ring-offset-4">
+              <div className="mb-5 rounded-xl border border-teal-200 bg-teal-50/60 p-4">
+                <div className="flex flex-col gap-1 sm:flex-row sm:items-center sm:justify-between sm:gap-4">
+                  <p className="text-xs font-semibold text-teal-950">{SCORING_METHODOLOGY_VERSION}</p>
+                  <p id="scoring-guidance-summary" className="text-xs leading-5 text-teal-900">Ordinal ratings—not percentages, interval measurements, or a composite quality score.</p>
+                </div>
+                <dl className="mt-3 grid min-w-0 grid-cols-2 gap-2 lg:grid-cols-5">
+                  {[...globalScoreAnchors].reverse().map((anchor) => (
+                    <div key={anchor.score} className={`min-w-0 rounded-lg border border-teal-200 bg-white px-3 py-2.5 ${anchor.score === 5 ? "col-span-2 lg:col-span-1" : ""}`}>
+                      <dt className="font-mono text-sm font-semibold text-teal-800">{anchor.score}</dt>
+                      <dd className="mt-1 break-words text-[11px] font-medium leading-4 text-slate-600">{anchor.label}</dd>
+                    </div>
+                  ))}
+                </dl>
               </div>
               <div className="grid min-w-0 gap-4 md:grid-cols-2">
-                {dimensionDetails.map(({ name }) => <ScoreControl key={name} dimension={name} value={form.scores[name]} disabled={locked} onChange={(score) => updateScore(name, score)} />)}
+                {dimensionRubrics.map((rubric) => <ScoreControl key={rubric.name} rubric={rubric} value={form.scores[rubric.name]} disabled={locked} onChange={(score) => updateScore(rubric.name, score)} />)}
               </div>
               <FieldError id="error-scores" message={errors.scores} />
             </div>

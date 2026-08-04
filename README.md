@@ -29,7 +29,7 @@ Each response receives one score from 1–5 for each exact dimension:
 4. Completeness
 5. Uncertainty Calibration
 
-The scale uses 1 for weaker performance, 3 for intermediate or mixed performance, and 5 for stronger performance. Detailed score-by-score anchors have not been defined in this repository.
+Scoring Methodology v1 treats these as ordinal ratings: 1 = Critical deficiency, 2 = Major deficiency, 3 = Mixed / adequate, 4 = Strong, and 5 = Fully satisfies the dimension. They are not percentages, probabilities, continuous measurements, or scientifically validated interval measurements. Detailed dimension-specific anchors and boundary guidance are documented in the in-app `/methodology` route.
 
 The exact error taxonomy is:
 

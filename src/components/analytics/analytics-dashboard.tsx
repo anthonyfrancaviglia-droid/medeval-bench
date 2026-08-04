@@ -157,17 +157,20 @@ export function AnalyticsDashboard() {
                   <p className="section-label">Snapshot</p>
                   <h2 id="summary-heading" className="mt-2 text-2xl font-semibold tracking-[-0.025em] text-slate-950">Evaluation summary</h2>
                 </div>
-                <p className="text-xs text-slate-500">Scores use a 1–5 scale</p>
+                <p className="text-xs text-slate-500">Scores use a 1–5 ordinal scale</p>
               </div>
               <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-5">
                 <DashboardCard label="Saved evaluations" value={analytics.totalEvaluations} detail="Local evaluation records" />
-                <DashboardCard label="Mean dimension score" value={formatScore(analytics.overallMeanScore)} detail="Arithmetic mean of every dimension score" accent="text-teal-700" />
+                <DashboardCard label="Descriptive rating mean" value={formatScore(analytics.overallMeanScore)} detail="Arithmetic summary of all ordinal ratings—not a quality score" accent="text-teal-700" />
                 {analytics.verdicts.map(({ verdict, count }) => <DashboardCard key={verdict} label={verdict} value={count} detail={`Evaluations marked ${verdict}`} accent={verdict === "PASS" ? "text-teal-700" : verdict === "REVISE" ? "text-amber-700" : "text-rose-700"} />)}
               </div>
+              <aside className="mt-4 rounded-xl border border-amber-200 bg-amber-50/80 px-4 py-3 text-sm leading-6 text-amber-950" role="note">
+                <strong>Ordinal-score note.</strong> Arithmetic means shown here are pre-existing descriptive summaries of ordinal ratings. They are not validated interval measurements, a composite quality score, or verdict thresholds; interpret each dimension individually and in context.
+              </aside>
             </section>
 
             <div className="grid min-w-0 gap-7 xl:grid-cols-[1.3fr_0.7fr]">
-              <Panel eyebrow="Five-dimension rubric" title="Dimension performance" description="Arithmetic mean for each dimension across all saved evaluations.">
+              <Panel eyebrow="Five-dimension rubric" title="Dimension performance" description="Descriptive arithmetic mean for each ordinal dimension across all saved evaluations.">
                 <div role="img" aria-label="Horizontal bar chart of average scores for the five evaluation dimensions on a 1 to 5 scale" className="h-[340px] min-w-0">
                   <ResponsiveContainer width="100%" height="100%">
                     <BarChart data={analytics.dimensionAverages} layout="vertical" margin={{ top: 4, right: 24, bottom: 8, left: 8 }}>
@@ -262,7 +265,7 @@ export function AnalyticsDashboard() {
                     </div>
                     <dl className="mt-4 grid grid-cols-2 gap-3 text-xs">
                       <div><dt className="text-slate-400">Subject</dt><dd className="mt-1 font-medium text-slate-700">{evaluation.subjectArea}</dd></div>
-                      <div><dt className="text-slate-400">Mean score</dt><dd className="mt-1 font-mono font-semibold text-slate-950">{formatScore(evaluation.meanScore)} / 5</dd></div>
+                      <div><dt className="text-slate-400">Descriptive mean</dt><dd className="mt-1 font-mono font-semibold text-slate-950">{formatScore(evaluation.meanScore)} / 5</dd></div>
                       <div className="col-span-2"><dt className="text-slate-400">Saved</dt><dd className="mt-1 text-slate-700">{dateFormatter.format(new Date(evaluation.createdAt))}</dd></div>
                     </dl>
                   </article>
@@ -271,7 +274,7 @@ export function AnalyticsDashboard() {
               <div className="hidden overflow-hidden rounded-xl border border-slate-200 md:block">
                 <table className="w-full table-fixed text-left text-sm">
                   <thead className="bg-slate-50 text-xs uppercase tracking-wider text-slate-500">
-                    <tr><th className="w-[34%] px-4 py-3 font-semibold">Case</th><th className="w-[20%] px-4 py-3 font-semibold">Subject</th><th className="w-[13%] px-4 py-3 font-semibold">Verdict</th><th className="w-[13%] px-4 py-3 text-right font-semibold">Mean</th><th className="w-[20%] px-4 py-3 font-semibold">Saved</th></tr>
+                    <tr><th className="w-[34%] px-4 py-3 font-semibold">Case</th><th className="w-[20%] px-4 py-3 font-semibold">Subject</th><th className="w-[13%] px-4 py-3 font-semibold">Verdict</th><th className="w-[13%] px-4 py-3 text-right font-semibold">Descriptive mean</th><th className="w-[20%] px-4 py-3 font-semibold">Saved</th></tr>
                   </thead>
                   <tbody className="divide-y divide-slate-100">
                     {analytics.recentEvaluations.map((evaluation) => (
