@@ -476,7 +476,7 @@ export default function MethodologyPage() {
           {errorTaxonomy.map((error, index) => (
             <article key={error} className={`min-w-0 rounded-2xl border p-5 sm:p-6 ${error === "NO_MAJOR_ERROR" ? "border-teal-200 bg-teal-50/60" : "border-slate-200 bg-white"}`}>
               <div className="flex min-w-0 items-start gap-3">
-                <span className="shrink-0 font-mono text-xs text-slate-400">{String(index + 1).padStart(2, "0")}</span>
+                <span className="shrink-0 font-mono text-xs text-slate-500">{String(index + 1).padStart(2, "0")}</span>
                 <h3 className="min-w-0 break-words font-mono text-xs font-semibold leading-5 text-slate-900">{error}</h3>
               </div>
               <p className="mt-3 text-sm leading-6 text-slate-600">{taxonomyDescriptions[error]}</p>

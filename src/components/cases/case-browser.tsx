@@ -51,8 +51,8 @@ export function CaseBrowser({ cases }: { cases: readonly BenchmarkCase[] }) {
             <label htmlFor="case-search" className="min-w-0 text-sm font-semibold text-slate-700">
               Search cases
               <span className="relative mt-2 block">
-                <svg aria-hidden="true" viewBox="0 0 20 20" className="pointer-events-none absolute left-3.5 top-1/2 size-4 -translate-y-1/2 text-slate-400" fill="none"><circle cx="8.5" cy="8.5" r="4.8" stroke="currentColor" strokeWidth="1.5" /><path d="m12 12 4 4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" /></svg>
-                <input id="case-search" type="search" value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Search by ID or title" className="w-full rounded-xl border border-slate-300 bg-white py-3 pr-3.5 pl-10 text-sm text-slate-900 shadow-sm outline-none transition placeholder:text-slate-400 hover:border-slate-400 focus:border-teal-600 focus:ring-4 focus:ring-teal-600/10" />
+                <svg aria-hidden="true" viewBox="0 0 20 20" className="pointer-events-none absolute left-3.5 top-1/2 size-4 -translate-y-1/2 text-slate-500" fill="none"><circle cx="8.5" cy="8.5" r="4.8" stroke="currentColor" strokeWidth="1.5" /><path d="m12 12 4 4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" /></svg>
+                <input id="case-search" type="search" value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Search by ID or title" className="w-full rounded-xl border border-slate-300 bg-white py-3 pr-3.5 pl-10 text-sm text-slate-900 shadow-sm outline-none transition placeholder:text-slate-500 hover:border-slate-400 focus:border-teal-600 focus:ring-4 focus:ring-teal-600/10" />
               </span>
             </label>
             <label htmlFor="subject-filter" className="min-w-0 text-sm font-semibold text-slate-700">

@@ -11,7 +11,7 @@ export function SiteFooter() {
         <div className="flex flex-wrap items-center gap-x-5 gap-y-2">
           <Link href="/methodology" className="transition-colors hover:text-teal-700">Methodology</Link>
           <Link href="/about" className="transition-colors hover:text-teal-700">About</Link>
-          <span className="text-slate-400">Not for clinical use</span>
+          <span className="text-slate-500">Not for clinical use</span>
         </div>
       </div>
     </footer>

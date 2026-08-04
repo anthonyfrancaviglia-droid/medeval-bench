@@ -272,7 +272,7 @@ export function AnalyticsDashboard() {
                 <ol className="space-y-3">
                   {analytics.errorFrequencies.map(({ error, count }, index) => (
                     <li key={error} className="grid min-w-0 grid-cols-[1.5rem_minmax(0,1fr)_auto] items-center gap-3">
-                      <span className="font-mono text-xs text-slate-400">{String(index + 1).padStart(2, "0")}</span>
+                      <span className="font-mono text-xs text-slate-500">{String(index + 1).padStart(2, "0")}</span>
                       <div className="min-w-0">
                         <div className="flex min-w-0 items-center justify-between gap-3">
                           <span className="break-words font-mono text-xs font-semibold text-slate-700">{error}</span>
@@ -317,11 +317,11 @@ export function AnalyticsDashboard() {
                       <span className={`shrink-0 rounded-full px-2.5 py-1 text-[11px] font-semibold ring-1 ${verdictStyles[evaluation.verdict]}`}>{evaluation.verdict}</span>
                     </div>
                     <dl className="mt-4 grid grid-cols-2 gap-3 text-xs">
-                      <div><dt className="text-slate-400">Subject</dt><dd className="mt-1 font-medium text-slate-700">{evaluation.subjectArea}</dd></div>
-                      <div><dt className="text-slate-400">Saved</dt><dd className="mt-1 text-slate-700">{dateFormatter.format(new Date(evaluation.createdAt))}</dd></div>
+                      <div><dt className="text-slate-500">Subject</dt><dd className="mt-1 font-medium text-slate-700">{evaluation.subjectArea}</dd></div>
+                      <div><dt className="text-slate-500">Saved</dt><dd className="mt-1 text-slate-700">{dateFormatter.format(new Date(evaluation.createdAt))}</dd></div>
                     </dl>
                     <div className="mt-4 border-t border-slate-100 pt-4">
-                      <p className="mb-2 text-[10px] font-semibold uppercase tracking-[0.12em] text-slate-400">Score profile</p>
+                      <p className="mb-2 text-[10px] font-semibold uppercase tracking-[0.12em] text-slate-500">Score profile</p>
                       <ScoreProfile scores={evaluation.scores} />
                     </div>
                   </article>
@@ -335,7 +335,7 @@ export function AnalyticsDashboard() {
                   <tbody className="divide-y divide-slate-100">
                     {analytics.recentEvaluations.map((evaluation) => (
                       <tr key={evaluation.id} className="align-top">
-                        <td className="min-w-0 px-4 py-3.5"><p className="break-words font-medium text-slate-900">{evaluation.caseTitle}</p><p className="mt-1 break-all font-mono text-xs text-slate-400">{evaluation.caseId}</p></td>
+                        <td className="min-w-0 px-4 py-3.5"><p className="break-words font-medium text-slate-900">{evaluation.caseTitle}</p><p className="mt-1 break-all font-mono text-xs text-slate-500">{evaluation.caseId}</p></td>
                         <td className="break-words px-4 py-3.5 text-slate-600">{evaluation.subjectArea}</td>
                         <td className="px-4 py-3.5"><span className={`inline-flex rounded-full px-2.5 py-1 text-[11px] font-semibold ring-1 ${verdictStyles[evaluation.verdict]}`}>{evaluation.verdict}</span></td>
                         <td className="px-4 py-3.5"><ScoreProfile scores={evaluation.scores} /></td>

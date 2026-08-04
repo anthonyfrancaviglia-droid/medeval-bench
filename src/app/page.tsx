@@ -28,7 +28,7 @@ function DimensionGlyph({ index }: { index: number }) {
 export default function Home() {
   return (
     <>
-      <section className="hero-grid border-b border-slate-200/80">
+      <section className="hero-grid overflow-x-clip border-b border-slate-200/80">
         <div className="page-shell grid gap-14 py-16 sm:py-24 lg:grid-cols-[1.08fr_0.92fr] lg:items-center lg:py-28">
           <div>
             <div className="eyebrow mb-6">
@@ -63,7 +63,7 @@ export default function Home() {
             <div className="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-[0_24px_80px_-28px_rgba(15,23,42,0.28)]">
               <div className="flex items-center justify-between border-b border-slate-100 px-6 py-4">
                 <div>
-                  <p className="text-xs font-semibold uppercase tracking-[0.16em] text-slate-400">Evaluation framework</p>
+                  <p className="text-xs font-semibold uppercase tracking-[0.16em] text-slate-500">Evaluation framework</p>
                   <p className="mt-1 font-semibold text-slate-900">Five-dimension review</p>
                 </div>
                 <span className="rounded-full bg-teal-50 px-2.5 py-1 text-xs font-semibold text-teal-700">1–5 scale</span>
@@ -74,7 +74,7 @@ export default function Home() {
                     <div>
                       <div className="flex items-center justify-between gap-4 text-sm">
                         <span className="font-medium text-slate-700">{dimension.name}</span>
-                        <span className="font-mono text-xs text-slate-400">01–05</span>
+                        <span className="font-mono text-xs text-slate-500">01–05</span>
                       </div>
                       <div className="mt-2 grid grid-cols-5 gap-1" aria-hidden="true">
                         {[1, 2, 3, 4, 5].map((score) => <span key={score} className="h-1.5 rounded-full bg-teal-500/70" />)}
@@ -122,7 +122,7 @@ export default function Home() {
           <div>
             <p className="section-label text-teal-300">Curated by a human</p>
             <h2 className="mt-4 max-w-xl text-3xl font-semibold tracking-[-0.035em] sm:text-4xl">Synthetic cases, personally verified.</h2>
-            <p className="mt-5 max-w-xl leading-7 text-slate-300">Benchmark content will be authored and scientifically reviewed by the project owner before release. No unverified domain cases are included in this foundation.</p>
+            <p className="mt-5 max-w-xl leading-7 text-slate-300">Benchmark content is authored and personally reviewed by the project owner before entering the verified library. The current collection contains two Medication Safety cases; the labels shown here are planned coverage areas.</p>
           </div>
           <div className="flex flex-wrap gap-2 lg:justify-end">
             {subjectAreas.map((subject) => <span key={subject} className="rounded-full border border-slate-700 bg-slate-900 px-4 py-2 text-sm text-slate-300">{subject}</span>)}

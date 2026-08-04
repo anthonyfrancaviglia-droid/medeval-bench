@@ -33,7 +33,7 @@ export type BenchmarkSubjectArea =
 
 /**
  * Domain content is intentionally represented as fields only. BenchmarkCase
- * instances will be added after their scientific content has been verified.
+ * instances belong in the static collection only after their content is verified.
  */
 export interface BenchmarkCase {
   id: string;

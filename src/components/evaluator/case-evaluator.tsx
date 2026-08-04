@@ -57,7 +57,7 @@ interface EvaluatorFormState {
   reviewerNotes: string;
 }
 
-const inputClassName = "mt-2 w-full rounded-xl border border-slate-300 bg-white px-3.5 py-3 text-sm text-slate-900 shadow-sm outline-none transition placeholder:text-slate-400 hover:border-slate-400 focus:border-teal-600 focus:ring-4 focus:ring-teal-600/10 disabled:cursor-not-allowed disabled:bg-slate-100 disabled:text-slate-500 aria-[invalid=true]:border-red-400 aria-[invalid=true]:focus:border-red-500 aria-[invalid=true]:focus:ring-red-500/10";
+const inputClassName = "mt-2 w-full rounded-xl border border-slate-300 bg-white px-3.5 py-3 text-sm text-slate-900 shadow-sm outline-none transition placeholder:text-slate-500 hover:border-slate-400 focus:border-teal-600 focus:ring-4 focus:ring-teal-600/10 disabled:cursor-not-allowed disabled:bg-slate-100 disabled:text-slate-500 aria-[invalid=true]:border-red-400 aria-[invalid=true]:focus:border-red-500 aria-[invalid=true]:focus:ring-red-500/10";
 
 function createEmptyForm(benchmarkCase?: BenchmarkCase): EvaluatorFormState {
   return {
@@ -424,7 +424,7 @@ export function CaseEvaluator({
                 <FieldError id="error-prompt" message={errors.prompt} />
               </label>
               <label className="min-w-0 text-sm font-semibold text-slate-700 sm:col-span-2" htmlFor="field-referenceNotes">
-                Reference judgment or evaluation guidance <span className="font-normal text-slate-400">(optional)</span>
+                Reference judgment or evaluation guidance <span className="font-normal text-slate-500">(optional)</span>
                 <textarea id="field-referenceNotes" name="referenceNotes" rows={5} value={form.referenceNotes} disabled={caseFieldsLocked} onChange={(event) => updateText("referenceNotes", event.target.value)} placeholder="Enter your verified reference judgment or evaluation guidance" className={`${inputClassName} resize-y leading-6`} />
               </label>
             </div>
@@ -498,7 +498,7 @@ export function CaseEvaluator({
               <FieldError id="error-verdict" message={errors.verdict} />
             </fieldset>
             <label className="mt-6 block text-sm font-semibold text-slate-700" htmlFor="field-reviewerNotes">
-              Reviewer notes <span className="font-normal text-slate-400">(optional)</span>
+              Reviewer notes <span className="font-normal text-slate-500">(optional)</span>
               <textarea id="field-reviewerNotes" name="reviewerNotes" rows={5} value={form.reviewerNotes} disabled={locked} onChange={(event) => updateText("reviewerNotes", event.target.value)} placeholder="Record a concise evaluation rationale" className={`${inputClassName} resize-y leading-6`} />
             </label>
           </FormSection>

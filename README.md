@@ -4,6 +4,8 @@ MedEval Bench is an interactive healthcare/STEM LLM evaluation benchmark and por
 
 Repository: [github.com/anthonyfrancaviglia-droid/medeval-bench](https://github.com/anthonyfrancaviglia-droid/medeval-bench)
 
+Production: [medeval-bench.vercel.app](https://medeval-bench.vercel.app)
+
 ## Overview
 
 The application supports transparent human review of LLM responses across educational healthcare and STEM subject areas. Reviewers score each response across five dimensions, assign explicit error labels, choose an overall verdict, and record concise rationale.
@@ -15,7 +17,7 @@ MedEval Bench is educational software and a portfolio project. It is not a medic
 - **Home** — project overview, educational disclaimer, and evaluation-framework summary.
 - **Case Evaluator** — manual case entry, model-response review, five-dimension scoring, error labeling, verdict assignment, validation, and local saving.
 - **Benchmark Case Browser** — search and subject filtering over a static, personally verified case collection, with individual case routes and evaluator handoff.
-- **Analytics Dashboard** — local summaries of dimension averages, verdict distribution, error frequency, subject coverage, and recent evaluations.
+- **Analytics Dashboard** — local summaries of dimension score distributions, verdict distribution, error frequency, subject coverage, and recent evaluations.
 - **Methodology** — documented workflow, rubric, taxonomy, verdict framing, verification philosophy, data handling, and limitations.
 - **About** — project purpose, authorship, architecture, AI-assisted implementation, and current status.
 
@@ -55,9 +57,9 @@ Verdicts are structured human judgments informed by dimension scores, error labe
 
 ## Benchmark Content
 
-Benchmark cases are synthetic educational cases across Pharmacology, Medication Safety, Biology, Chemistry, Epidemiology, and Statistics.
+The current verified library contains two synthetic Medication Safety cases. Planned subject coverage also includes Pharmacology, Biology, Chemistry, Epidemiology, and Statistics.
 
-Only content personally verified by the project owner belongs in the static verified-case collection. Reference judgments and evaluation guidance are prepared separately from the application infrastructure. The collection may intentionally remain empty while cases are being prepared and reviewed.
+Only content personally verified by the project owner belongs in the static verified-case collection. Reference judgments and evaluation guidance are prepared separately from the application infrastructure. The collection remains intentionally limited while additional cases are prepared and reviewed.
 
 No scientific benchmark case content is generated automatically into the verified library.
 
@@ -120,7 +122,9 @@ public/                     # Static public assets
 Key modules include:
 
 - `src/lib/types.ts` — shared benchmark and evaluation contracts.
-- `src/data/benchmark-cases.ts` — intentionally controlled verified-case collection.
+- `src/data/benchmark-cases.ts` — intentionally controlled raw verified-case collection.
+- `src/lib/benchmark-cases.ts` — validated benchmark access boundary for application consumers.
+- `src/lib/benchmark-case-validation.ts` — collection integrity validation.
 - `src/lib/evaluation-storage.ts` — versioned localStorage persistence and validation.
 - `src/lib/analytics.ts` — deterministic analytics aggregation.
 
@@ -194,4 +198,4 @@ Scientific benchmark content, reference judgments, domain verification, and inte
 
 ## Status
 
-The core application infrastructure is implemented. Personally verified cases are being added separately after review, and the benchmark library remains intentionally content-controlled. Methodology and scoring guidance may continue to be refined as the project develops.
+MedEval Bench is operational and deployed as a portfolio-ready v1 application. Scoring Methodology v1 and ordinal-aligned Analytics are implemented. The verified library currently contains two personally reviewed Medication Safety cases. Additional cases may be added after review, but further expansion is not required for v1 completeness.
