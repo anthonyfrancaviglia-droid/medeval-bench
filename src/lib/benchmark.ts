@@ -1,4 +1,12 @@
-import type { BenchmarkSubjectArea, EvaluationDimension } from "./types";
+import type {
+  BenchmarkSubjectArea,
+  DimensionScore,
+  ErrorTaxonomy,
+  EvaluationDimension,
+  OverallVerdict,
+} from "./types";
+
+export const dimensionScores = [1, 2, 3, 4, 5] as const satisfies readonly DimensionScore[];
 
 export const dimensionDetails: ReadonlyArray<{
   name: EvaluationDimension;
@@ -19,3 +27,17 @@ export const subjectAreas: readonly BenchmarkSubjectArea[] = [
   "Epidemiology",
   "Statistics",
 ];
+
+export const errorTaxonomy = [
+  "FACTUAL_ERROR",
+  "UNSUPPORTED_CLAIM",
+  "MEDICATION_SAFETY",
+  "CONTRAINDICATION_OMISSION",
+  "DOSING_ERROR",
+  "OVERCONFIDENCE",
+  "INSTRUCTION_FAILURE",
+  "INCOMPLETE_RESPONSE",
+  "NO_MAJOR_ERROR",
+] as const satisfies readonly ErrorTaxonomy[];
+
+export const overallVerdicts = ["PASS", "REVISE", "REJECT"] as const satisfies readonly OverallVerdict[];

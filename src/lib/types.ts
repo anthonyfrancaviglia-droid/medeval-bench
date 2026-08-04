@@ -45,10 +45,15 @@ export interface BenchmarkCase {
   version: number;
 }
 
+/** The verified case fields captured with a manual evaluation. */
+export type EvaluationCaseSnapshot = Pick<
+  BenchmarkCase,
+  "id" | "title" | "subjectArea" | "prompt" | "referenceNotes"
+>;
+
 /** The complete reviewer assessment produced for one model response. */
 export interface EvaluationResult {
-  caseId: BenchmarkCase["id"];
-  modelLabel: string;
+  case: EvaluationCaseSnapshot;
   response: string;
   scores: EvaluationDimensionScores;
   errors: ErrorTaxonomy[];
