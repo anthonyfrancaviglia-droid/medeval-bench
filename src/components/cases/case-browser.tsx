@@ -42,7 +42,7 @@ export function CaseBrowser({ cases }: { cases: readonly BenchmarkCase[] }) {
           <div className="flex flex-wrap items-center justify-between gap-3">
             <div>
               <h2 id="case-filters-heading" className="font-semibold text-slate-950">Find a verified case</h2>
-              <p className="mt-1 text-sm text-slate-500">Search case IDs, titles, and tags, or narrow by subject area.</p>
+              <p className="mt-1 text-sm text-slate-500">Search case IDs and titles, or narrow by subject area.</p>
             </div>
             <p aria-live="polite" className="text-sm font-medium text-slate-600">{filteredCases.length} {filteredCases.length === 1 ? "case" : "cases"} shown</p>
           </div>
@@ -52,7 +52,7 @@ export function CaseBrowser({ cases }: { cases: readonly BenchmarkCase[] }) {
               Search cases
               <span className="relative mt-2 block">
                 <svg aria-hidden="true" viewBox="0 0 20 20" className="pointer-events-none absolute left-3.5 top-1/2 size-4 -translate-y-1/2 text-slate-400" fill="none"><circle cx="8.5" cy="8.5" r="4.8" stroke="currentColor" strokeWidth="1.5" /><path d="m12 12 4 4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" /></svg>
-                <input id="case-search" type="search" value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Search by ID, title, or tag" className="w-full rounded-xl border border-slate-300 bg-white py-3 pr-3.5 pl-10 text-sm text-slate-900 shadow-sm outline-none transition placeholder:text-slate-400 hover:border-slate-400 focus:border-teal-600 focus:ring-4 focus:ring-teal-600/10" />
+                <input id="case-search" type="search" value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Search by ID or title" className="w-full rounded-xl border border-slate-300 bg-white py-3 pr-3.5 pl-10 text-sm text-slate-900 shadow-sm outline-none transition placeholder:text-slate-400 hover:border-slate-400 focus:border-teal-600 focus:ring-4 focus:ring-teal-600/10" />
               </span>
             </label>
             <label htmlFor="subject-filter" className="min-w-0 text-sm font-semibold text-slate-700">
@@ -90,7 +90,7 @@ export function CaseBrowser({ cases }: { cases: readonly BenchmarkCase[] }) {
                 <article key={benchmarkCase.id} className="flex min-w-0 flex-col rounded-2xl border border-slate-200 bg-white p-5 shadow-[0_18px_50px_-38px_rgba(15,23,42,0.4)] sm:p-6">
                   <div className="flex flex-wrap items-center justify-between gap-3">
                     <span className="break-all font-mono text-xs font-semibold text-teal-700">{benchmarkCase.id}</span>
-                    <span className="rounded-full bg-emerald-50 px-2.5 py-1 text-[11px] font-semibold text-emerald-800 ring-1 ring-emerald-200">Verified</span>
+                    <span className="rounded-full bg-emerald-50 px-2.5 py-1 text-[11px] font-semibold text-emerald-800 ring-1 ring-emerald-200">{benchmarkCase.verificationStatus}</span>
                   </div>
                   <h3 className="mt-4 break-words text-xl font-semibold tracking-[-0.02em] text-slate-950">{benchmarkCase.title}</h3>
                   <div className="mt-4 flex flex-wrap gap-2 text-xs text-slate-600">
